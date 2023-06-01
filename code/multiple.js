@@ -10,11 +10,9 @@ d3.csv(
   "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv",
   rowConverter,
   function (error, data) {
-    // data = data.slice(0, 100);
     if (error) {
       console.log(error);
     } else {
-      // console.log(data);
       // Set the margins
       var margin = { top: 60, right: 100, bottom: 20, left: 80 },
         width = 1000 - margin.left - margin.right,
@@ -33,8 +31,7 @@ d3.csv(
       var svg = d3
         .select("body")
         .append("svg")
-        // .style("width", width + margin.left + margin.right + "px")
-        // .style("height", height + margin.top + margin.bottom + "px")
+
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -350,12 +347,6 @@ d3.csv(
             return d.Date;
           }).right;
           var idx = bisect(d.values, xDate);
-
-          sortingObj.push({
-            country: d.values[idx].Country,
-            case: d.values[idx].Case,
-            date: d.values[idx].Date,
-          });
         });
 
         if (sortingObj[0] == null) return;
@@ -365,7 +356,6 @@ d3.csv(
         tooltip
           .html((d) => {
             var string = sortingObj[0].Date;
-            var i = string.indexOf("00:00:00");
             return string.substring(0, i);
           })
           .style("left", d3.event.pageX + 50 + "px")

@@ -55,11 +55,9 @@ d3.csv(
     var dataProcess = data
       .filter((item) => item.location == location)
       .slice(0, numberDay);
-    console.log(dataProcess);
     data.forEach(function (d) {
       d.date = parseDate(d.date);
-      // console.log(d.date)
-      // d.date = d3.timeParse("%Y-%m-%d")(d.date);
+
       if (d.total_cases == "") {
         d.total_cases = 0;
       } else {
@@ -68,7 +66,6 @@ d3.csv(
     });
 
     var allGroup = Array.from(new Set(data.map((d) => d["location"])));
-    // var dataF = data.filter(function (d) { return d.location == "Afghanistan" }).slice(0, numberDay);
 
     // load data
     d3.select("#selectButton")
@@ -94,6 +91,15 @@ d3.csv(
       numberDay = e.target.value;
       update(location, numberDay);
     };
+
+    const selectdayInput = document.getElementById("selectday");
+
+    selectdayInput.addEventListener("change", function () {
+      let value = parseInt(selectdayInput.value);
+      if (value <= 0) {
+        selectdayInput.value = "1";
+      }
+    });
 
     // Scale the range of the data
     x.domain(
@@ -191,11 +197,10 @@ d3.csv(
       .on("mousemove", mousemove);
 
     function mousemove(element) {
-      var x0 = x.invert(d3.mouse(this)[0]),
-        i = bisectDate(dataProcess, x0, 1),
-        d0 = dataProcess[i - 1],
-        d1 = dataProcess[i],
-        d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+      var x0 = x.invert(d3.mouse(element)[0]);
+      var i = bisectDate(dataProcess, x0, 1);
+      var d0 = dataProcess[i - 1];
+      var d1 = dataProcess[i];
 
       focus
         .select("circle.y")
@@ -264,7 +269,6 @@ d3.csv(
           return d.location == selectedGroup;
         })
         .slice(0, numberDay);
-      console.log(dataFilter);
       var maxCases = d3.max(dataFilter, function (d) {
         return d.total_cases;
       });
@@ -272,13 +276,6 @@ d3.csv(
         return d.date;
       });
       if (maxCases >= 1000 && ok1 == 0) {
-        alert(
-          "On " +
-            formatDate(maxDate) +
-            " " +
-            selectedGroup +
-            " reached 1 000 cases"
-        );
         ok1 = 1;
       }
       if (maxCases < 1000) {
@@ -286,13 +283,6 @@ d3.csv(
       }
 
       if (maxCases >= 10000 && ok2 == 0) {
-        alert(
-          "On " +
-            formatDate(maxDate) +
-            " " +
-            selectedGroup +
-            " reached 10 000 cases"
-        );
         ok2 = 1;
       }
       if (maxCases < 10000) {
@@ -300,13 +290,6 @@ d3.csv(
       }
 
       if (maxCases >= 100000 && ok3 == 0) {
-        alert(
-          "On " +
-            formatDate(maxDate) +
-            " " +
-            selectedGroup +
-            " reached more than 100 000 cases"
-        );
         ok3 = 1;
       }
       if (maxCases < 100000) {
@@ -314,13 +297,6 @@ d3.csv(
       }
 
       if (maxCases >= 1000000 && ok4 == 0) {
-        alert(
-          "On " +
-            formatDate(maxDate) +
-            " " +
-            selectedGroup +
-            " reached more than 1 000 000 cases"
-        );
         ok4 = 1;
       }
       if (maxCases < 1000000) {
@@ -328,13 +304,6 @@ d3.csv(
       }
 
       if (maxCases >= 10000000 && ok5 == 0) {
-        alert(
-          "On " +
-            formatDate(maxDate) +
-            " " +
-            selectedGroup +
-            " reached more than 10 000 000 cases"
-        );
         ok5 = 1;
       }
       if (maxCases < 10000000) {
@@ -365,7 +334,6 @@ d3.csv(
 
       lineSvg.remove();
       lineSvg = svg.append("g");
-      console.log(valueline(dataFilter));
 
       lineSvg
         .append("path")
