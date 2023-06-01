@@ -1,5 +1,4 @@
 // Set the dimensions of the canvas / graph
-
 var margin = { top: 50, right: 100, bottom: 30, left: 100 },
   width = 1000 - margin.left - margin.right,
   height = 600 - margin.top - margin.bottom;
